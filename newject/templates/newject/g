@@ -1,0 +1,66 @@
+{% extends 'newject/base.html' %}
+{% load static %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+:root {
+    --primary: #833AB4;
+    --secondary: #E1306C;
+    --accent: #F56040;
+}
+
+#header {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+}
+
+#branding h1 {
+    color: white;
+    font-weight: bold;
+}
+
+.module h2, .module caption, .inline-group h2 {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+}
+
+a:link, a:visited {
+    color: var(--primary);
+}
+
+.button, input[type=submit], input[type=button], .submit-row input, a.button {
+    background: var(--primary);
+    color: white;
+}
+
+.button:hover, input[type=submit]:hover, input[type=button]:hover {
+    background: var(--secondary);
+}
+
+.login .form-row #id_username, .login .form-row #id_password {
+    padding: 8px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.login .submit-row {
+    padding: 1em 0 0 0;
+}
+h3{
+    color:black;
+}
+</style>
+{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">
+    <img src="{% static 'images/church-logo.png' %}" alt="Full Gospel Church Logo" height="40" style="vertical-align: middle; margin-right: 10px;">
+   Kyabakuza Full Gospel Church Admin
+</h1>
+<h3> bynasi charles</h3>
+{% endblock %}
+ path('ministries/', views.ministries, name='ministries'),
+    path('resources/', views.resources, name='resources'),
+    path('prayer/', views.prayer, name='prayer'),
+    path('testimonies/', views.testimonies, name='testimonies'),
+    path('devotionals/', views.devotionals, name='devotionals'),

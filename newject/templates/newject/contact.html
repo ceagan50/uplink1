@@ -1,0 +1,203 @@
+{% extends 'newject/base.html' %}
+{% load static %}
+
+{% block title %}Contact Us - Full Gospel Church Masaka Kyabakuza{% endblock %}
+
+{% block content %}
+<section class="contact-page">
+    <div class="container">
+        <h2 class="section-title">Contact Us</h2>
+
+        <div class="contact-grid">
+            <div class="contact-info">
+                <h3>Get in Touch</h3>
+                <p>We'd love to hear from you! Whether you have a question, prayer request, or just want to say hello, please don't hesitate to reach out.</p>
+
+                <div class="info-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <div>
+                        <h4>Address</h4>
+                        <p>Kyabakuza, Masaka City, Uganda</p>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <i class="fas fa-phone-alt"></i>
+                    <div>
+                        <h4>Phone</h4>
+                        <p>+256 752674297</p>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <i class="fas fa-envelope"></i>
+                    <div>
+                        <h4>Email</h4>
+                        <p>kyabakuzafgc@gmail.com</p>
+                    </div>
+                </div>
+
+                <div class="service-times">
+                    <h4>Service Times</h4>
+                    <p><strong>Sunday Worship:</strong> 9:00 AM - 12:00 PM</p>
+                    <p><strong>Bible Study:</strong> Wednesday 5:00 PM - 7:00 PM</p>
+                    <p><strong>Prayer Meeting:</strong> Friday 6:00 AM - 7:30 AM</p>
+                </div>
+            </div>
+
+            <div class="contact-form">
+                <h3>Send Us a Message</h3>
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.non_field_errors }}
+                    
+                    <div class="form-group">
+                        {{ form.name.label_tag }}
+                        {{ form.name }}
+                        {{ form.name.errors }}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form.email.label_tag }}
+                        {{ form.email }}
+                        {{ form.email.errors }}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form.subject.label_tag }}
+                        {{ form.subject }}
+                        {{ form.subject.errors }}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form.message.label_tag }}
+                        {{ form.message }}
+                        {{ form.message.errors }}
+                    </div>
+
+                    <button type="submit" class="btn submit-btn">Send Message</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="map-section">
+            <h3>Find Us Here</h3>
+            <div class="map-container">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3989.7488459132005!2d31.706320305032335!3d-0.33812259728391636!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x19d7890073d267ef%3A0xb4da35af49f8d0e6!2sKyabakuza%20Full%20Gospel!5e0!3m2!1sen!2sug!4v1748688041140!5m2!1sen!2sug"
+                 width="1000" height="480" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+         
+        </div>
+    </div>
+</section>
+
+
+
+<style>
+
+
+.contact-page {
+    padding: 60px 0;
+}
+
+.section-title {
+    font-size: 2.8rem;
+    text-align: center;
+    color: #003366;
+    margin-bottom: 50px;
+}
+
+.contact-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+
+.contact-info, .contact-form {
+    flex: 1 1 45%;
+    background: #f9f9f9;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.contact-info h3, .contact-form h3 {
+    color: dodgerblue;
+    margin-bottom: 20px;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.info-item i {
+    font-size: 1.5rem;
+    color: dodgerblue;
+    margin-right: 15px;
+}
+
+.service-times h4 {
+    margin-top: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.form-group input, .form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+.submit-btn {
+    background-color: dodgerblue;
+    color: white;
+    font-weight: bold;
+    padding: 12px 25px;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+.submit-btn:hover {
+    background-color: #005bb5;
+}
+
+.map-section {
+    margin-top: 50px;
+    text-align: center;
+}
+
+.map-section h3 {
+    font-size: 2rem;
+    color: #003366;
+    margin-bottom: 20px;
+}
+
+.map-container iframe {
+    width: 100%;
+    border: 0;
+    border-radius: 10px;
+    height: 450px;
+}
+
+/* Make sure footer spans full width */
+footer {
+    width: 100%;
+    background-color: dodgerblue;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+}
+
+</style>
+{% endblock %}

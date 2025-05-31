@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Kyabakuza Full Gospel Church, Masaka City - A vibrant Christian community spreading the Gospel of Jesus Christ.">
+    <meta name="keywords" content="Kyabakuza Full Gospel Church, Masaka, Christian, Gospel, Jesus Christ, Bible, Worship">
+    <meta name="author" content="Kyabakuza Full Gospel Church">
+    <title>Kyabakuza Full Gospel Church - {% block title %}{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <style>
+        :root {
+            --dodgerblue: #092d52;
+            --dodgerblue-dark: #04386d;
+            --accent-gold: #D4A017;
+            --white: #FFFFFF;
+            --light-gray: #F5F5F5;
+            --dark-gray: #333333;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            line-height: 1.6;
+            color: var(--dark-gray);
+            background: var(--light-gray);
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Header Styles */
+        .header {
+            background: var(--dodgerblue);
+            color: var(--white);
+            padding: 1rem 0;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .live-time {
+            font-size: clamp(0.8rem, 2vw, 0.9rem);
+            color: var(--light-gray);
+        }
+
+        .church-name {
+            text-align: center;
+            flex: 1;
+        }
+
+        .church-name img {
+            max-width: 120px;
+            height: auto;
+            margin-bottom: 0.5rem;
+        }
+
+        .church-name h1 {
+            font-size: clamp(1.5rem, 4vw, 1.8rem);
+            font-family: 'Playfair Display', serif;
+            margin: 0.5rem 0;
+        }
+
+        .church-name p {
+            font-size: clamp(0.8rem, 2vw, 0.9rem);
+            color: var(--light-gray);
+        }
+
+        .header-actions .btn {
+            padding: 0.6rem 1.2rem;
+            background: var(--accent-gold);
+            color: var(--white);
+            border: none;
+            border-radius: 25px;
+            text-decoration: none;
+            transition: background 0.3s ease;
+            font-size: clamp(0.8rem, 2vw, 1rem);
+        }
+
+        .header-actions .btn:hover {
+            background: var(--dodgerblue-dark);
+        }
+
+        /* Navigation */
+        .navbar ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            padding: 1rem 0;
+            margin: 0;
+            flex-wrap: wrap;
+        }
+
+        .navbar ul li {
+            margin: 0 1rem;
+        }
+
+        .navbar ul li a {
+            color: var(--white);
+            font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .navbar ul li a:hover,
+        .navbar ul li a.active {
+            color: var(--accent-gold);
+        }
+
+        /* Chatbot Styles */
+        .chatbot-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .chatbot-toggle {
+            background: var(--dodgerblue);
+            color: var(--white);
+            border: none;
+            border-radius: 50%;
+            width: clamp(50px, 5vw, 60px);
+            height: clamp(50px, 5vw, 60px);
+            font-size: clamp(1.2rem, 3vw, 1.5rem);
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: background 0.3s ease;
+        }
+
+        .chatbot-toggle:hover {
+            background: var(--dodgerblue-dark);
+        }
+
+        .chatbot-window {
+            display: none;
+            background: var(--white);
+            width: clamp(300px, 90%, 340px);
+            max-height: clamp(400px, 70vh, 520px);
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .chatbot-window.open {
+            display: block;
+        }
+
+        .chatbot-header {
+            background: var(--dodgerblue);
+            color: var(--white);
+            padding: 1rem;
+            font-size: clamp(1rem, 2.5vw, 1.2rem);
+            text-align: center;
+        }
+
+        .chatbot-body {
+            max-height: clamp(300px, 60vh, 400px);
+            overflow-y: auto;
+            padding: clamp(1rem, 2vw, 1.2rem);
+            background: var(--light-gray);
+            font-size: clamp(0.8rem, 2vw, 0.95rem);
+            line-height: 1.5;
+        }
+
+        .chatbot-message {
+            margin-bottom: clamp(0.5rem, 1.5vw, 1rem);
+            padding: clamp(0.6rem, 1.5vw, 0.8rem);
+            border-radius: 10px;
+        }
+
+        .chatbot-message.user {
+            background: var(--dodgerblue);
+            color: var(--white);
+            margin-left: clamp(10%, 15vw, 20%);
+            border-bottom-right-radius: 0;
+        }
+
+        .chatbot-message.bot {
+            background: var(--white);
+            color: var(--dark-gray);
+            margin-right: clamp(10%, 15vw, 20%);
+            border-bottom-left-radius: 0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .chatbot-input {
+            display: flex;
+            padding: 1rem;
+            background: var(--white);
+            border-top: 1px solid #ddd;
+        }
+
+        .chatbot-input input {
+            flex: 1;
+            padding: clamp(0.5rem, 1.5vw, 0.7rem);
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            font-size: clamp(0.7rem, 2vw, 0.9rem);
+        }
+
+        .chatbot-input button {
+            background: var(--accent-gold);
+            color: var(--white);
+            border: none;
+            border-radius: 20px;
+            padding: clamp(0.5rem, 1.5vw, 0.7rem) clamp(0.8rem, 2vw, 1rem);
+            margin-left: 0.5rem;
+            cursor: pointer;
+            font-size: clamp(0.7rem, 2vw, 0.9rem);
+            transition: background 0.3s ease;
+        }
+
+        .chatbot-input button:hover {
+            background: var(--dodgerblue-dark);
+        }
+
+        /* Footer Styles */
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: clamp(1rem, 2vw, 2rem);
+            margin-bottom: clamp(1rem, 2vw, 2rem);
+        }
+
+        .footer h3 {
+            font-family: 'Playfair Display', serif;
+            color: var(--accent-gold);
+            font-size: clamp(1rem, 2.5vw, 1.2rem);
+            margin-bottom: clamp(0.5rem, 1.5vw, 1rem);
+        }
+
+        .footer p, .footer ul li a {
+            color: var(--white);
+            font-size: clamp(0.7rem, 2vw, 0.9rem);
+        }
+
+        .footer ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer ul li {
+            margin-bottom: clamp(0.3rem, 1vw, 0.5rem);
+        }
+
+        .footer-social .social-icons a {
+            color: var(--white);
+            font-size: clamp(1.2rem, 3vw, 1.5rem);
+            margin: 0 clamp(0.3rem, 1vw, 0.5rem);
+            transition: color 0.3s ease;
+        }
+
+        .footer-social .social-icons a:hover {
+            color: var(--accent-gold);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            font-size: clamp(0.7rem, 1.5vw, 0.85rem);
+        }
+
+        /* Responsive Design Enhancements */
+        @media (max-width: 768px) {
+            .header-top {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .navbar ul {
+                flex-direction: column;
+                padding: clamp(0.5rem, 1vw, 1rem) 0;
+            }
+
+            .navbar ul li {
+                margin: clamp(0.3rem, 1vw, 0.5rem) 0;
+            }
+
+            .chatbot-container {
+                bottom: clamp(10px, 2vw, 20px);
+                right: clamp(10px, 2vw, 20px);
+            }
+
+            .chatbot-window {
+                width: 90%;
+                right: 5%;
+                max-height: 70vh;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .church-name h1 {
+                font-size: 1.5rem;
+            }
+
+            .chatbot-input {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .chatbot-input input,
+            .chatbot-input button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-top">
+                <div class="live-time" id="liveTime"></div>
+                <div class="church-name">
+                    <img src="{% static 'images/church.png' %}" alt="Kyabakuza Full Gospel Church Logo" class="church-logo">
+                    <h1>KYABAKUZA FULL GOSPEL CHURCH</h1>
+                    <p>Masaka Kyabakuza City</p>
+                </div>
+                <div class="header-actions">
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'admin_logout' %}" class="btn btn-outline">Log Out</a>
+                    {% else %}
+                        <a href="{% url 'admin:login' %}" class="btn btn-outline">Admin Login</a>
+                    {% endif %}
+                </div>
+            </div>
+            <nav class="navbar">
+                <ul>
+                    <li><a href="{% url 'home' %}" class="{% if request.path == '/' %}active{% endif %}">Home</a></li>
+                    <li><a href="{% url 'sermons' %}" class="{% if request.path == '/sermons/' %}active{% endif %}">Sermons</a></li>
+                    <li><a href="{% url 'events' %}" class="{% if request.path == '/events/' %}active{% endif %}">Events</a></li>
+                    <li><a href="{% url 'contact' %}" class="{% if request.path == '/contact/' %}active{% endif %}">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <div class="chatbot-container">
+        <button class="chatbot-toggle" title="Open Chatbot" aria-label="Open Chatbot">
+            <i class="fas fa-comment-alt"></i>
+        </button>
+        <div class="chatbot-window">
+            <div class="chatbot-header">Kyabakuza Chatbot</div>
+            <div class="chatbot-body" id="chatbotBody" aria-live="polite">
+                <div class="chatbot-message bot">Hello, beloved friend! I'm here to chat with you and support our church community. May I have your name, please?</div>
+            </div>
+            <div class="chatbot-input">
+                <input type="text" id="chatbotInput" placeholder="Type your message..." aria-label="Chatbot input">
+                <button onclick="sendMessage()" aria-label="Send message">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-about">
+                    <h3>Kyabakuza Full Gospel Church</h3>
+                    <p>Masaka City, Kyabakuza</p>
+                    <p>Spreading the love and hope of Jesus Christ to all nations.</p>
+                </div>
+                <div class="footer-links">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="{% url 'home' %}">Home</a></li>
+                        <li><a href="{% url 'sermons' %}">Sermons</a></li>
+                        <li><a href="{% url 'events' %}">Events</a></li>
+                        <li><a href="{% url 'contact' %}">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h3>Contact Us</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> Kyabakuza, Masaka City</p>
+                    <p><i class="fas fa-phone"></i> +256 752 674 297</p>
+                    <p><i class="fas fa-envelope"></i> kyabakuzafgc@gmail.com</p>
+                </div>
+                <div class="footer-social">
+                    <h3>Follow Us</h3>
+                    <div class="social-icons">
+                        <a href="https://facebook.com" target="_blank" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                        <a href="https://twitter.com" target="_blank" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="https://instagram.com" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="https://youtube.com" target="_blank" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© {% now "Y" %} Kyabakuza Full Gospel Church, Masaka City. All Rights Reserved. <sub>Developed with TxT Tech Africa</sub></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{% static 'js/script.js' %}"></script>
+    <script>
+        // Chatbot Functionality
+        let userName = null;
+        let conversationContext = ''; // To track conversation context
+
+        function sendMessage() {
+            const input = document.getElementById('chatbotInput');
+            const message = input.value.trim();
+            if (!message) return;
+
+            // Add user message to chat
+            const chatbotBody = document.getElementById('chatbotBody');
+            const userMessage = document.createElement('div');
+            userMessage.className = 'chatbot-message user';
+            userMessage.textContent = message;
+            chatbotBody.appendChild(userMessage);
+
+            // Process message
+            let response = '';
+            if (!userName) {
+                userName = message;
+                response = `Hello, ${userName}! It’s wonderful to connect with you. I’m here to chat and support our church family. What’s on your mind today?`;
+                conversationContext = '';
+            } else {
+                response = processMessage(message);
+            }
+
+            // Add bot response
+            const botMessage = document.createElement('div');
+            botMessage.className = 'chatbot-message bot';
+            botMessage.textContent = response;
+            chatbotBody.appendChild(botMessage);
+
+            // Scroll to bottom and clear input
+            chatbotBody.scrollTop = chatbotBody.scrollHeight;
+            input.value = '';
+        }
+
+        function processMessage(message) {
+            const lowerMessage = message.toLowerCase().replace(/[^a-z0-9\s]/g, '');
+
+            // Update context based on previous messages
+            if (lowerMessage.includes('prayer') || lowerMessage.includes('pray')) {
+                conversationContext = 'prayer';
+            } else if (lowerMessage.includes('church') || lowerMessage.includes('community')) {
+                conversationContext = 'community';
+            } else if (lowerMessage.includes('help') || lowerMessage.includes('support')) {
+                conversationContext = 'support';
+            }
+
+            if (lowerMessage.includes('goodbye') || lowerMessage.includes('bye') || lowerMessage.includes('done') || lowerMessage.includes('finished')) {
+                return `Take care, ${userName}! Safe journey as you go. Our church is located at Kyabakuza, Masaka City, Uganda (near coordinates -0.33833180594503265, 31.70547272698855). Goodbye, and please follow us on Facebook, Twitter, Instagram, and YouTube for updates from our church family!`;
+            } else if (lowerMessage.includes('hello') || lowerMessage.includes('hi')) {
+                return `Hi again, ${userName}! Great to chat with you. What’s new since we last spoke?`;
+            } else if (lowerMessage.includes('how are you')) {
+                return `I’m doing wonderfully, ${userName}, thanks for checking! I’m here to brighten your day. How are you feeling right now?`;
+            } else if (lowerMessage.includes('prayer') || lowerMessage.includes('pray')) {
+                if (conversationContext === 'prayer') {
+                    return `I’m glad you’re still thinking about prayer, ${userName}. Please share more, or let’s pray: ‘Lord, guide ${userName} with peace today. Amen.’ Join us Wednesdays at 6:00 PM!`;
+                }
+                return `I’d love to pray with you, ${userName}. Tell me what’s on your heart, or I can offer: ‘Lord, bless ${userName} with peace and strength. Amen.’ Wednesdays at 6:00 PM are our prayer times!`;
+            } else if (lowerMessage.includes('church') || lowerMessage.includes('community')) {
+                if (conversationContext === 'community') {
+                    return `Back to our church family, ${userName}? Awesome! Check ‘Events’ for the latest. What else can I help you with?`;
+                }
+                return `Our Kyabakuza church family is so welcoming, ${userName}! Join us for events—see the ‘Events’ page. What brings you here today?`;
+            } else if (lowerMessage.includes('help') || lowerMessage.includes('support')) {
+                if (conversationContext === 'support') {
+                    return `Still here to help, ${userName}! What else can I assist with? Contact us at kyabakuzafgc@gmail.com or +256 752 674 297 if needed.`;
+                }
+                return `I’m here to support you, ${userName}! Tell me more, or reach out at kyabakuzafgc@gmail.com or +256 752 674 297.`;
+            } else if (lowerMessage.includes('location') || lowerMessage.includes('where')) {
+                return `We’re at Kyabakuza, Masaka City, Uganda, near -0.33833180594503265, 31.70547272698855. Come visit when you can, ${userName}!`;
+            } else if (lowerMessage.includes('follow') || lowerMessage.includes('social media')) {
+                return `Great choice, ${userName}! Follow us on Facebook, Twitter, Instagram, and YouTube for church updates. Stay connected!`;
+            } else if (lowerMessage.includes('weather') || lowerMessage.includes('day')) {
+                return `It’s a lovely day here in Masaka at 03:00 PM EAT, ${userName}! I don’t have real-time weather, but it’s a great time to connect. What else is on your mind?`;
+            } else if (lowerMessage.includes('family') || lowerMessage.includes('friends')) {
+                return `Family and friends are a blessing, ${userName}! How can I support you with that today?`;
+            } else {
+                return `Interesting, ${userName}! You said: "${message}". I love chatting about life, community, or anything you’d like. Give me a bit more to work with?`;
+            }
+        }
+
+        // Toggle Chatbot Window
+        document.querySelector('.chatbot-toggle').addEventListener('click', () => {
+            const chatbotWindow = document.querySelector('.chatbot-window');
+            chatbotWindow.classList.toggle('open');
+        });
+
+        // Allow Enter key to send message
+        document.getElementById('chatbotInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+    </script>
+</body>
+</html>

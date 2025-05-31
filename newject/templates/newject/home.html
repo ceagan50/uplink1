@@ -1,0 +1,528 @@
+{% extends 'newject/base.html' %}
+{% load static %}
+
+{% block title %}Home - Kyabakuza Full Gospel Church{% endblock %}
+
+{% block content %}
+<style>
+    :root {
+        --dodgerblue: #092d52;
+        --dodgerblue-dark: #04386d;
+        --dodgerblue-light: #B0E0E6;
+        --white: #FFFFFF;
+        --light-gray: #F5F5F5;
+        --dark-gray: #333333;
+        --accent-gold: #D4A017; /* Added for a warm, spiritual touch */
+    }
+
+    /* Header and Footer */
+    header {
+        background-color: var(--dodgerblue);
+        color: var(--white);
+        padding: 1rem 0;
+    }
+
+    footer {
+        background-color: var(--dodgerblue);
+        color: var(--white);
+        padding: 2rem 0;
+        text-align: center;
+    }
+
+    /* Hero Section */
+    .hero {
+        background: url("{% static 'images/bhg.jpeg' %}") center/cover no-repeat;
+        color: var(--white);
+        padding: 10rem 0;
+        text-align: center;
+        position: relative;
+        box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.5);
+    }
+
+    .hero-content h2 {
+        font-size: 3.8rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7);
+    }
+
+    .hero-content p {
+        font-size: 1.6rem;
+        margin-bottom: 1.5rem;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+    }
+
+    .hero-content .verse {
+        font-style: italic;
+        font-size: 1.2rem;
+        margin-bottom: 2rem;
+        color: var(--dodgerblue-light);
+    }
+
+    /* Info Tabs */
+    .info-tabs {
+        display: flex;
+        justify-content: center;
+        margin: 3rem 0;
+        background: var(--light-gray);
+        padding: 1rem;
+        border-radius: 10px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .tab {
+        padding: 1rem 2rem;
+        cursor: pointer;
+        font-size: 1.1rem;
+        border-right: 1px solid #ddd;
+        transition: all 0.3s ease;
+    }
+
+    .tab:last-child {
+        border-right: none;
+    }
+
+    .tab:hover {
+        background: var(--dodgerblue);
+        color: var(--white);
+    }
+
+    .tab.active {
+        background: var(--dodgerblue);
+        color: var(--white);
+        font-weight: 600;
+    }
+
+    .tab-content {
+        display: none;
+        padding: 2.5rem;
+        background: var(--white);
+        border-radius: 10px;
+        margin-bottom: 3rem;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .tab-content.active {
+        display: block;
+    }
+
+    /* Sermon and Event Cards */
+    .latest-sermons .grid, .upcoming-events .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 2rem;
+    }
+
+    .card {
+        background: var(--white);
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+    }
+
+    .card:hover {
+        transform: translateY(-8px);
+    }
+
+    .card-img {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+    }
+
+    .card-body {
+        padding: 1.5rem;
+    }
+
+    .card-title {
+        font-size: 1.3rem;
+        margin-bottom: 0.8rem;
+        color: var(--dodgerblue);
+    }
+
+    .card-text {
+        font-size: 0.95rem;
+        color: var(--dark-gray);
+        margin-bottom: 1rem;
+    }
+
+    .card-date {
+        font-size: 0.85rem;
+        color: var(--accent-gold);
+        margin-bottom: 0.8rem;
+    }
+
+    .sermon-actions {
+        display: flex;
+        gap: 0.7rem;
+    }
+
+    .sermon-actions .btn {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem;
+    }
+
+    /* Button Styling */
+    .btn {
+        background: var(--dodgerblue);
+        color: var(--white);
+        padding: 0.9rem 2rem;
+        border-radius: 50px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+        font-weight: 500;
+    }
+
+    .btn:hover {
+        background: var(--dodgerblue-dark);
+        transform: translateY(-3px);
+    }
+
+    /* Section Styling */
+    .section-title {
+        font-size: 2.8rem;
+        color: var(--dodgerblue);
+        margin-bottom: 2.5rem;
+        text-align: center;
+        position: relative;
+        font-weight: 700;
+    }
+
+    .section-title:after {
+        content: '';
+        position: absolute;
+        width: 100px;
+        height: 5px;
+        background: var(--accent-gold);
+        bottom: -12px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    section {
+        padding: 5rem 0;
+    }
+
+    .upcoming-events, .testimonies {
+        background: var(--light-gray);
+    }
+
+    /* About Section */
+    .about-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        align-items: center;
+    }
+
+    .about-image img {
+        width: 100%;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Testimonies Section */
+    .testimonies .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 2rem;
+    }
+
+    .testimony-card {
+        background: var(--white);
+        padding: 1.5rem;
+        border-radius: 10px;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+
+    .testimony-card p {
+        font-style: italic;
+        color: var(--dark-gray);
+        margin-bottom: 1rem;
+    }
+
+    .testimony-card .author {
+        font-weight: 600;
+        color: var(--dodgerblue);
+    }
+
+    /* Join Us Section */
+    .join-us {
+        text-align: center;
+        background: var(--dodgerblue);
+        color: var(--white);
+        padding: 3rem 0;
+    }
+
+    .join-us .service-times {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        margin-top: 2rem;
+    }
+
+    .join-us .service-time {
+        background: var(--white);
+        color: var(--dodgerblue);
+        padding: 1rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Devotional Section */
+    .devotional {
+        text-align: center;
+        padding: 3rem 0;
+    }
+
+    .devotional blockquote {
+        font-style: italic;
+        font-size: 1.2rem;
+        color: var(--dark-gray);
+        margin: 1.5rem 0;
+        padding: 1rem 2rem;
+        background: var(--light-gray);
+        border-left: 5px solid var(--accent-gold);
+        border-radius: 5px;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .hero-content h2 {
+            font-size: 2.8rem;
+        }
+
+        .info-tabs {
+            flex-direction: column;
+        }
+
+        .tab {
+            border-right: none;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .about-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .latest-sermons .grid, .upcoming-events .grid, .testimonies .grid {
+            grid-template-columns: 1fr;
+        }
+
+        .join-us .service-times {
+            flex-direction: column;
+        }
+    }
+
+    .ded{
+        background-image: linear-gradient(30deg, rgba(135, 207, 235, 0.747),rgba(128, 0, 128, 0.678));
+        width: 100%;
+    }
+</style>
+
+<section class="hero">
+    <div class="container">
+        <div class="hero-content">
+            <div class="ded">
+            <h2>Welcome to Kyabakuza Full Gospel Church</h2>
+            <p>Discover a place where faith grows, hope thrives, and love transforms lives through Jesus Christ.</p>
+            <p class="verse">"For I know the plans I have for you,” declares the Lord, “plans to prosper you and not to harm you, plans to give you hope and a future." – Jeremiah 29:11</p>
+            <a href="{% url 'contact' %}" class="btn">Join Our Family</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    <div class="info-tabs">
+        <div class="tab active" onclick="openTab('tab1')">Our Beliefs</div>
+        <div class="tab" onclick="openTab('tab2')">Ministries</div>
+        <div class="tab" onclick="openTab('tab3')">Bible Study</div>
+        <div class="tab" onclick="openTab('tab4')">Prayer Request</div>
+    </div>
+
+    <div id="tab1" class="tab-content active">
+        <h3>Our Core Beliefs</h3>
+        <p>At Kyabakuza Full Gospel Church, we are anchored in the truth of the Holy Trinity: Father, Son, and Holy Spirit. We believe the Bible is the inspired, infallible Word of God, guiding us in faith and life. Salvation comes through faith in Jesus Christ, and we embrace the empowerment of the Holy Spirit, evidenced by spiritual gifts such as speaking in tongues.</p>
+        <p>"For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life." – John 3:16</p>
+    </div>
+
+    <div id="tab2" class="tab-content">
+        <h3>Our Ministries</h3>
+        <p>Our ministries are a heartbeat of our church, serving every member of our community. From our vibrant Children's Ministry to the dynamic Youth Fellowship, Women's and Men's Groups, Worship Team, Prayer Warriors, and Outreach Programs, we are committed to nurturing spiritual growth and serving Masaka Kyabakuza with love.</p>
+     
+    </div>
+
+    <div id="tab3" class="tab-content">
+        <h3>Bible Study Resources</h3>
+        <p>Join us every Wednesday at 6:00 PM for an enriching Bible study where we dive into God's Word together. Our current series, "Living for Christ in Today’s World," explores the Book of Ephesians. Access our online devotionals and study guides to deepen your walk with Jesus.</p>
+       
+    </div>
+
+    <div id="tab4" class="tab-content">
+        <h3>Submit a Prayer Request</h3>
+        <p>We believe in the transformative power of prayer. Share your needs with our dedicated prayer team, and we will lift you up before the Lord. Anonymous requests are welcome. "Do not be anxious about anything, but in every situation, by prayer and petition, with thanksgiving, present your requests to God." – Philippians 4:6</p>
+       
+    </div>
+</div>
+
+<section class="upcoming-events">
+    <div class="container">
+        <h2 class="section-title">Upcoming Events</h2>
+        <div class="grid">
+            {% for event in featured_events %}
+            <div class="card">
+                {% if event.image %}
+                <img src="{{ event.image.url }}" alt="{{ event.title }}" class="card-img">
+                {% else %}
+                <img src="{% static 'images/default-event.jpg' %}" alt="{{ event.title }}" class="card-img">
+                {% endif %}
+                <div class="card-body">
+                    <div class="card-date">
+                        <i class="far fa-calendar-alt"></i>
+                        {{ event.start_date|date:"M d, Y" }}
+                    </div>
+                    <h3 class="card-title">{{ event.title }}</h3>
+                    <p class="card-text">{{ event.description|truncatewords:20 }}</p>
+                    <a href="{% url 'events' %}#event-{{ event.id }}" class="btn">Learn More</a>
+                </div>
+            </div>
+            {% empty %}
+            <p>No upcoming events at this time. Stay tuned for updates!</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="latest-sermons">
+    <div class="container">
+        <h2 class="section-title">Recent Sermons</h2>
+        <div class="grid">
+            {% for sermon in latest_sermons %}
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-date">
+                        <i class="far fa-calendar-alt"></i>
+                        {{ sermon.date_preached|date:"M d, Y" }}
+                    </div>
+                    <h3 class="card-title">{{ sermon.title }}</h3>
+                    <p class="card-text">Preached by: {{ sermon.preacher }}</p>
+                    <p class="card-text">{{ sermon.description|truncatewords:15 }}</p>
+                    <div class="sermon-actions">
+                        {% if sermon.audio_file %}
+                        <a href="{{ sermon.audio_file.url }}" class="btn" target="_blank">
+                            <i class="fas fa-headphones"></i> Listen Now
+                        </a>
+                        {% endif %}
+                        {% if sermon.video_file %}
+                        <a href="{{ sermon.video_file.url }}" class="btn" target="_blank">
+                            <i class="fas fa-video"></i> Watch Now
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <p>No sermons available currently. Check back soon!</p>
+            {% endfor %}
+        </div>
+        <div class="text-center">
+            <a href="{% url 'sermons' %}" class="btn">Explore All Sermons</a>
+        </div>
+    </div>
+</section>
+
+<section class="testimonies">
+    <div class="container">
+        <h2 class="section-title">Testimonies of Faith</h2>
+        <div class="grid">
+            <div class="testimony-card">
+                <p>"Through the prayers and support of this church, I found strength to overcome my struggles. Jesus truly works through this community!"</p>
+                <p class="author">– Sarah M.</p>
+            </div>
+            <div class="testimony-card">
+                <p>"Joining the Youth Ministry transformed my life. I found purpose and a deeper connection with God."</p>
+                <p class="author">– John K.</p>
+            </div>
+            <div class="testimony-card">
+                <p>"The Bible study sessions helped me understand God's Word in a new way, bringing peace to my heart."</p>
+                <p class="author">– Mary N.</p>
+            </div>
+        </div>
+        <div class="text-center">
+            <div class="btn">Share Your Testimony</div>
+        </div>
+    </div>
+</section>
+
+<section class="join-us">
+    <div class="container">
+        <h2 class="section-title">Join Our Worship Services</h2>
+        <p>Come and experience the presence of God with us. All are welcome to our services, where we worship, pray, and grow together in faith.</p>
+        <div class="service-times">
+            <div class="service-time">
+                <h4>Sunday Service</h4>
+                <p>9:00 AM & 11:00 AM</p>
+            </div>
+            <div class="service-time">
+                <h4>Midweek Prayer</h4>
+                <p>Wednesday 6:00 PM</p>
+            </div>
+            <div class="service-time">
+                <h4>Youth Fellowship</h4>
+                <p>Friday 5:00 PM</p>
+            </div>
+        </div>
+        <a href="{% url 'contact' %}" class="btn">Plan Your Visit</a>
+    </div>
+</section>
+
+<section class="devotional">
+    <div class="container">
+        <h2 class="section-title">Daily Devotional</h2>
+        <p>Take a moment to reflect on God's Word with our daily devotional.</p>
+        <blockquote>
+            "Trust in the Lord with all your heart and lean not on your own understanding; in all your ways submit to him, and he will make your paths straight." – Proverbs 3:5-6
+        </blockquote>
+        <p>Reflect: How can you trust God more fully in your daily decisions?</p>
+        <div class="btn">Read More Devotionals</div>
+    </div>
+</section>
+
+<section class="about-church">
+    <div class="container">
+        <h2 class="section-title">About Our Church</h2>
+        <div class="about-grid">
+            <div class="about-content">
+                <p>Kyabakuza Full Gospel Church is a family of believers committed to sharing the love and hope of Jesus Christ in Masaka Kyabakuza. Guided by the Holy Spirit, we strive to make disciples, uplift our community, and glorify God in all we do.</p>
+                <p>Our vision is to see lives transformed by the power of the Gospel, as we worship together, serve one another, and reach out with compassion. Join us as we walk this journey of faith!</p>
+                <a href="{% url 'contact' %}" class="btn">Visit Us Today</a>
+            </div>
+            <div class="about-image">
+                <img src="{% static 'images/hyr.jpeg' %}" alt="Kyabakuza Full Gospel Church Building">
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    function openTab(tabId) {
+        const tabContents = document.getElementsByClassName('tab-content');
+        for (let i = 0; i < tabContents.length; i++) {
+            tabContents[i].classList.remove('active');
+        }
+
+        const tabs = document.getElementsByClassName('tab');
+        for (let i = 0; i < tabs.length; i++) {
+            tabs[i].classList.remove('active');
+        }
+
+        document.getElementById(tabId).classList.add('active');
+        event.currentTarget.classList.add('active');
+    }
+</script>
+{% endblock %}
